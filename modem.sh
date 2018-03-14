@@ -2,12 +2,12 @@
 set -e
 
 ### constants
-VERSION="18.02.0"
+VERSION="18.03.1"
 
-URL_MANUAL="https://storage.googleapis.com/fairphone-updates/7ecf1675-541e-4720-84fa-110a59464021/FP2-gms-18.02.0-manual.zip"
+URL_MANUAL="https://storage.googleapis.com/fairphone-updates/6efed6d5-54cf-4e02-bdcf-404f236bfa88/fp2-sibon-18.03.1-manual.zip"
 URL_OTA="https://storage.googleapis.com/fairphone-updates/7ecf1675-541e-4720-84fa-110a59464021/FP2-gms-18.02.0-ota-from-18.01.1.zip"
 
-CHECKSUM_MANUAL="c364cd8b56da41f020cc4eb6e76594ccc9fa2c3cf83a7b54917f37630178c87c"
+CHECKSUM_MANUAL="4ac3027c9c7437861180c972fd109e849dcf9c4fbb9872c3339cea46469ca9aa"
 CHECKSUM_OTA="ab56f2af2ae87ef8e95a43b3b46c0bef6a469098f59e386f4cd1aee08ed0b25e"
 
 ### check platform
@@ -15,6 +15,16 @@ unamestr="$(uname)"
 if [[ "$unamestr" == "Darwin" ]]; then
    alias sha256sum='gsha256sum'
 fi
+
+function exit_failure() {
+    echo >&2 "$*"
+    exit 1
+}
+
+command -v curl >/dev/null 2>&1		|| exit_failure "curl not found.  Aborting."
+command -v zip >/dev/null 2>&1		|| exit_failure "zip not found.  Aborting."
+command -v unzip >/dev/null 2>&1	|| exit_failure "unzip not found.  Aborting."
+command -v sha256sum >/dev/null 2>&1	|| exit_failure "sha256sum not found.  Aborting."
 
 ### print welcome message
 echo "Fairphone modem.zip generator"
