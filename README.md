@@ -1,9 +1,12 @@
-# Fairphone modem.zip generator
-The `modem.sh` shell script generates a reproducable, flashable ZIP file with the latest proprietary components for the Fairphone 2.
+# Fairphone(-community) modem.zip generator
+The `modem.sh` shell script generates a reproducible, flashable ZIP file with the latest proprietary components for the [Fairphone 2](https://shop.fairphone.com).
+
+### Looking for the compiled version?
+You can always download the latest modem.zip directly from [here](https://io.pinterjann.is/public/misc/fairphone/modem/modem-latest.zip).
 
 ### System requirements
 The script is designed to run on GNU/Linux, it should however run on other UNIX systems, too. The following tools are required for the script to run:
-`curl zip unzip sha256sum`
+`bash curl zip unzip sha256sum`
 
 ### Usage
 Clone the repository and execute `modem.sh`, it will download and verify the official Fairphone 2 firmware images and extract the proprietary components.
