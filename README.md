@@ -13,3 +13,6 @@ Clone the repository and execute `modem.sh`, it will download and verify the off
 
 ### Misc
 See this [forum post](https://forum.fairphone.com/t/pencil2-fp2-modem-firmware/35374) for more information about this script.
+
+### Updates
+The newest Fairphone OS versions can be found [here](https://support.fairphone.com/hc/en-us/articles/213290023-Fairphone-OS-downloads-for-Fairphone-2).
