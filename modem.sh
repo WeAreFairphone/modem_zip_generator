@@ -2,13 +2,13 @@
 set -e
 
 ### constants
-VERSION="18.03.1"
+VERSION="18.04.1"
 
-URL_MANUAL="https://storage.googleapis.com/fairphone-updates/6efed6d5-54cf-4e02-bdcf-404f236bfa88/fp2-sibon-18.03.1-manual.zip"
-URL_OTA="https://storage.googleapis.com/fairphone-updates/7ecf1675-541e-4720-84fa-110a59464021/FP2-gms-18.02.0-ota-from-18.01.1.zip"
+URL_MANUAL="https://storage.googleapis.com/fairphone-updates/6cb84543-9614-425d-9ab4-9e80baca2b8f/fp2-sibon-18.04.1-manual.zip"
+URL_OTA="https://storage.googleapis.com/fairphone-updates/7058d8ad-5694-4a1b-95c3-db9a76218c49/FP2-gms-18.04.1-ota-from-18.03.1.zip"
 
-CHECKSUM_MANUAL="4ac3027c9c7437861180c972fd109e849dcf9c4fbb9872c3339cea46469ca9aa"
-CHECKSUM_OTA="ab56f2af2ae87ef8e95a43b3b46c0bef6a469098f59e386f4cd1aee08ed0b25e"
+CHECKSUM_MANUAL="c4f5264f583a50ba1b979a84d8ca8a5c03a87c0798e675981ebeea130e321b97"
+CHECKSUM_OTA="b97bce6b0397f303b34b6d33386b5eedfd2261f3f750bd69930a1e31fcef3629"
 
 ### check platform
 unamestr="$(uname)"
