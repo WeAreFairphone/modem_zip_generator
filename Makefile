@@ -17,16 +17,10 @@ EDIFY_BINARY := ./src/META-INF/com/google/android/update-binary
 EDIFY_SCRIPT := ./src/META-INF/com/google/android/updater-script
 
 # Update ZIPs
-## Manual update for firmware images
-MANUAL_FILENAME := fp2-sibon-$(VERSION)-manual.zip
-MANUAL_FILE     := ./updates/$(MANUAL_FILENAME)
-MANUAL_URL      := https://storage.googleapis.com/fairphone-updates/6cb84543-9614-425d-9ab4-9e80baca2b8f/$(MANUAL_FILENAME)
-MANUAL_CHECKSUM := c4f5264f583a50ba1b979a84d8ca8a5c03a87c0798e675981ebeea130e321b97
-## OTA update for the Edify interpreter
-OTA_FILENAME := FP2-gms-18.04.1-ota-from-18.03.1.zip
+OTA_FILENAME := fp2-sibon-$(VERSION)-ota-userdebug.zip
 OTA_FILE     := ./updates/$(OTA_FILENAME)
-OTA_URL      := https://storage.googleapis.com/fairphone-updates/7058d8ad-5694-4a1b-95c3-db9a76218c49/$(OTA_FILENAME)
-OTA_CHECKSUM := b97bce6b0397f303b34b6d33386b5eedfd2261f3f750bd69930a1e31fcef3629
+OTA_URL      := https://storage.googleapis.com/fairphone-updates/6cb84543-9614-425d-9ab4-9e80baca2b8f/$(OTA_FILENAME)
+OTA_CHECKSUM := 97b39681b773804c8e12177293171698395c43ad9458c7ba823c85c503f00500
 
 # Dependencies
 CURL      := $(shell command -v curl 2>&1)
@@ -48,12 +42,6 @@ $(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
 		--recurse-path
 	@echo "Result: $(FLASHABLEZIP)"
 
-$(MANUAL_FILE):
-	@echo "Downloading $(MANUAL_FILENAME)..."
-	@mkdir -pv `dirname $(MANUAL_FILE)`
-	@$(CURL) --progress-bar "$(MANUAL_URL)" -o $(MANUAL_FILE)
-	@$(SHA256SUM) --check <(echo "$(MANUAL_CHECKSUM) $(MANUAL_FILE)") || rm -f "$(MANUAL_FILE)"
-
 $(OTA_FILE):
 	@echo "Downloading $(OTA_FILENAME)..."
 	@mkdir -pv `dirname $(OTA_FILE)`
@@ -69,11 +57,11 @@ $(EDIFY_BINARY): $(OTA_FILE)
 		-d `dirname $(EDIFY_BINARY)`
 	@touch $(EDIFY_BINARY) # Update filedate so Make doesn't unpack it always
 
-$(FIRMWARE_DIR): $(MANUAL_FILE)
+$(FIRMWARE_DIR): $(OTA_FILE)
 	@echo "Unpacking firmware files..."
 	@rm -rf "$(FIRMWARE_DIR)"
 	@$(UNZIP) -j \
-		$(MANUAL_FILE) \
+		$(OTA_FILE) \
 		images/rpm.mbn \
 		images/emmc_appsboot.mbn \
 		images/NON-HLOS.bin \
