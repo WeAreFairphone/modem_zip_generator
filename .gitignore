@@ -8,5 +8,4 @@ updates/
 src/firmware-update/
 
 # Ignore specific files
-src/VERSION
 src/META-INF/com/google/android/update-binary

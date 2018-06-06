@@ -12,9 +12,9 @@ RELEASENAME  := "modem-$(VERSION)_%Y-%m-%d.zip"
 # Paths
 ROOT         := $(shell pwd)
 SOURCE       := ./src/
-VERSION_FILE := ./src/VERSION
 FIRMWARE_DIR := ./src/firmware-update/
 EDIFY_BINARY := ./src/META-INF/com/google/android/update-binary
+EDIFY_SCRIPT := ./src/META-INF/com/google/android/updater-script
 
 # Update ZIPs
 ## Manual update for firmware images
@@ -39,7 +39,7 @@ SHA256SUM := $(shell if [[ "$(uname -s)" == "Darwin" ]]; then command -v gsha256
 all: build
 
 build: $(FLASHABLEZIP)
-$(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(VERSION_FILE)
+$(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
 	@echo "Building flashable ZIP..."
 	@mkdir -pv `dirname $(FLASHABLEZIP)`
 	@rm -f "$(FLASHABLEZIP)"
@@ -59,10 +59,6 @@ $(OTA_FILE):
 	@mkdir -pv `dirname $(OTA_FILE)`
 	@$(CURL) --progress-bar "$(OTA_URL)" -o $(OTA_FILE)
 	@$(SHA256SUM) --check <(echo "$(OTA_CHECKSUM) $(OTA_FILE)") || rm -f "$(OTA_FILE)"
-
-$(VERSION_FILE):
-	@echo "Outputting version file..."
-	@echo "$(VERSION)" > "$(VERSION_FILE)"
 
 $(EDIFY_BINARY): $(OTA_FILE)
 	@echo "Unpacking Edify interpreter..."

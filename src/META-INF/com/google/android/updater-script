@@ -22,5 +22,5 @@ set_progress(0.900000);
 
 package_extract_file("firmware-update/NON-HLOS.bin", "/dev/block/platform/msm_sdcc.1/by-name/modem");
 
-ui_print("Flashing successful! You have updated your modem firmware to 18.04.1.");
+ui_print("Flashing successful! You have updated your modem firmware.");
 set_progress(1.000000);
