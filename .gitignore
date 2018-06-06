@@ -1,0 +1,12 @@
+# Ignore ZIPs altogether
+*.zip
+
+# Ignore specific directories
+build/
+release/
+updates/
+src/firmware-update/
+
+# Ignore specific files
+src/VERSION
+src/META-INF/com/google/android/update-binary

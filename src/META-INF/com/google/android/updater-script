@@ -1,0 +1,26 @@
+get_device_compatible("FP2") == "OK" || abort("This package is for \"FP2\" devices; this is a \"" + getprop("ro.product.device") + "\".");
+set_progress(0.200000);
+
+ui_print("Patching firmware images...");
+
+package_extract_file("firmware-update/tz.mbn", "/dev/block/platform/msm_sdcc.1/by-name/tz");
+set_progress(0.300000);
+
+package_extract_file("firmware-update/sbl1.mbn", "/dev/block/platform/msm_sdcc.1/by-name/sbl1");
+set_progress(0.400000);
+
+package_extract_file("firmware-update/rpm.mbn", "/dev/block/platform/msm_sdcc.1/by-name/rpm");
+set_progress(0.600000);
+
+package_extract_file("firmware-update/emmc_appsboot.mbn", "/dev/block/platform/msm_sdcc.1/by-name/aboot");
+msm.boot_update("backup");
+msm.boot_update("finalize");
+set_progress(0.800000);
+
+package_extract_file("firmware-update/splash.img", "/dev/block/platform/msm_sdcc.1/by-name/splash");
+set_progress(0.900000);
+
+package_extract_file("firmware-update/NON-HLOS.bin", "/dev/block/platform/msm_sdcc.1/by-name/modem");
+
+ui_print("Flashing successful! You have updated your modem firmware to 18.04.1.");
+set_progress(1.000000);
