@@ -71,6 +71,7 @@ $(EDIFY_BINARY): $(OTA_FILE)
 		$(OTA_FILE) \
 		META-INF/com/google/android/update-binary \
 		-d `dirname $(EDIFY_BINARY)`
+	@touch $(EDIFY_BINARY) # Update filedate so Make doesn't unpack it always
 
 $(FIRMWARE_DIR): $(MANUAL_FILE)
 	@echo "Unpacking firmware files..."
