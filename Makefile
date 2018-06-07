@@ -62,12 +62,12 @@ $(FIRMWARE_DIR): $(OTA_FILE)
 	@rm -rf "$(FIRMWARE_DIR)"
 	@$(UNZIP) -j \
 		$(OTA_FILE) \
-		images/rpm.mbn \
-		images/emmc_appsboot.mbn \
-		images/NON-HLOS.bin \
-		images/tz.mbn \
-		images/splash.img \
-		images/sbl1.mbn \
+		firmware-update/rpm.mbn \
+		firmware-update/emmc_appsboot.mbn \
+		firmware-update/NON-HLOS.bin \
+		firmware-update/tz.mbn \
+		firmware-update/splash.img \
+		firmware-update/sbl1.mbn \
 		-d $(FIRMWARE_DIR)
 
 clean:
