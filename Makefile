@@ -29,7 +29,7 @@ UNZIP     := $(shell command -v unzip 2>&1)
 SHA256SUM := $(shell if [[ "$(uname -s)" == "Darwin" ]]; then command -v gsha256sum; else command -v sha256sum; fi)
 
 
-.PHONY: all build clean release
+.PHONY: all build clean release install
 all: build
 
 build: $(FLASHABLEZIP)
@@ -85,3 +85,8 @@ release: $(FLASHABLEZIP)
 	@echo "Release file location:"
 	@mkdir -pv release/
 	@cp -v "$(FLASHABLEZIP)" "release/$$(date +$(RELEASENAME))"
+
+install: $(FLASHABLEZIP)
+	@echo "Waiting for ADB sideload mode"
+	@adb wait-for-sideload
+	@adb sideload $(FLASHABLEZIP)
