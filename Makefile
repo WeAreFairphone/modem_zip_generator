@@ -7,7 +7,7 @@ SHELL     := /bin/bash
 # Version and release
 VERSION      := 18.04.1
 FLASHABLEZIP := ./build/modem.zip
-RELEASENAME  := "modem-$(VERSION)_%Y-%m-%d.zip"
+RELEASENAME  := $(shell date +"modem-$(VERSION)_%Y-%m-%d.zip")
 
 # Paths
 ROOT         := $(shell pwd)
@@ -92,9 +92,11 @@ clean:
 	rm -f "$(EDIFY_BINARY)"
 
 release: $(FLASHABLEZIP)
-	@echo "Release file location:"
 	@mkdir -pv release/
-	@cp -v "$(FLASHABLEZIP)" "release/$$(date +$(RELEASENAME))"
+	@echo -n "Release file: "
+	@cp -v "$(FLASHABLEZIP)" "release/$(RELEASENAME)"
+	@echo "Release checksum: release/$(RELEASENAME).sha256sum"
+	@cd release/ && $(SHA256SUM) $(RELEASENAME) > $(RELEASENAME).sha256sum
 
 install: $(FLASHABLEZIP)
 	@echo "Waiting for ADB sideload mode"
