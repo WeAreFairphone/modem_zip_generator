@@ -15,6 +15,7 @@ SOURCE       := ./src/
 FIRMWARE_DIR := ./src/firmware-update/
 EDIFY_BINARY := ./src/META-INF/com/google/android/update-binary
 EDIFY_SCRIPT := ./src/META-INF/com/google/android/updater-script
+TEMP_DIR     := $(shell mktemp --dry-run -d /tmp/modem.XXXXXXXX)
 
 # Update ZIPs
 OTA_FILENAME := fp2-sibon-$(VERSION)-ota-userdebug.zip
@@ -32,14 +33,23 @@ SHA256SUM := $(shell if [[ "$(uname -s)" == "Darwin" ]]; then command -v gsha256
 .PHONY: all build clean release install
 all: build
 
+
 build: $(FLASHABLEZIP)
 $(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
+	@mkdir -p "$(TEMP_DIR)"
+	@cp -r \
+		$(FIRMWARE_DIR) \
+		$(EDIFY_BINARY) \
+		$(EDIFY_SCRIPT) \
+		-t "$(TEMP_DIR)"
+	@find "$(TEMP_DIR)" -exec touch -t 197001010000 {} + # Reproducibility
 	@echo "Building flashable ZIP..."
 	@mkdir -pv `dirname $(FLASHABLEZIP)`
 	@rm -f "$(FLASHABLEZIP)"
-	@cd "$(SOURCE)" && zip -X \
+	@cd "$(TEMP_DIR)" && zip -X \
 		"$(ROOT)/$(FLASHABLEZIP)" . \
 		--recurse-path
+	@rm -rf "$(TEMP_DIR)"
 	@echo "Result: $(FLASHABLEZIP)"
 
 $(OTA_FILE):
