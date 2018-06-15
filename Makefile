@@ -8,6 +8,8 @@ SHELL     := /bin/bash
 VERSION      := 18.04.1
 FLASHABLEZIP := ./build/modem.zip
 RELEASENAME  := $(shell date +"modem-$(VERSION)_%Y-%m-%d.zip")
+RELEASEZIP   := release/$(RELEASENAME)
+RELEASESUM   := $(RELEASEZIP).sha256sum
 
 # Paths
 ROOT         := $(shell pwd)
@@ -44,32 +46,32 @@ $(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
 		-t "$(TEMP_DIR)"
 	@find "$(TEMP_DIR)" -exec touch -t 197001010000 {} + # Reproducibility
 	@echo "Building flashable ZIP..."
-	@mkdir -pv `dirname $(FLASHABLEZIP)`
-	@rm -f "$(FLASHABLEZIP)"
+	@mkdir -pv "$(@D)"
+	@rm -f "$@"
 	@cd "$(TEMP_DIR)" && zip -X \
-		"$(ROOT)/$(FLASHABLEZIP)" . \
+		"$(ROOT)/$@" . \
 		--recurse-path
 	@rm -rf "$(TEMP_DIR)"
-	@echo "Result: $(FLASHABLEZIP)"
+	@echo "Result: $@"
 
 $(OTA_FILE):
 	@echo "Downloading $(OTA_FILENAME)..."
-	@mkdir -pv `dirname $(OTA_FILE)`
-	@$(CURL) --progress-bar "$(OTA_URL)" -o $(OTA_FILE)
-	@$(SHA256SUM) --check <(echo "$(OTA_CHECKSUM) $(OTA_FILE)") || rm -f "$(OTA_FILE)"
+	@mkdir -pv "$(@D)"
+	@$(CURL) --progress-bar "$(OTA_URL)" -o "$@"
+	@$(SHA256SUM) --check <(echo "$(OTA_CHECKSUM) $@") || rm -f "$@"
 
 $(EDIFY_BINARY): $(OTA_FILE)
 	@echo "Unpacking Edify interpreter..."
-	@rm -rf "$(EDIFY_BINARY)"
+	@rm -rf "$@"
 	@$(UNZIP) -j \
 		$(OTA_FILE) \
 		META-INF/com/google/android/update-binary \
-		-d `dirname $(EDIFY_BINARY)`
-	@touch $(EDIFY_BINARY) # Update filedate so Make doesn't unpack it always
+		-d "$(@D)"
+	@touch "$@" # Update filedate so Make doesn't unpack it always
 
 $(FIRMWARE_DIR): $(OTA_FILE)
 	@echo "Unpacking firmware files..."
-	@rm -rf "$(FIRMWARE_DIR)"
+	@rm -rf "$@"
 	@$(UNZIP) -j \
 		$(OTA_FILE) \
 		firmware-update/rpm.mbn \
@@ -78,7 +80,7 @@ $(FIRMWARE_DIR): $(OTA_FILE)
 		firmware-update/tz.mbn \
 		firmware-update/splash.img \
 		firmware-update/sbl1.mbn \
-		-d $(FIRMWARE_DIR)
+		-d "$@"
 
 clean:
 	@echo "Removing files..."
@@ -91,12 +93,14 @@ clean:
 	# Edify binary
 	rm -f "$(EDIFY_BINARY)"
 
-release: $(FLASHABLEZIP)
-	@mkdir -pv release/
+release: $(RELEASEZIP) $(RELEASESUM)
+$(RELEASEZIP): $(FLASHABLEZIP)
+	@mkdir -pv "$(@D)"
 	@echo -n "Release file: "
-	@cp -v "$(FLASHABLEZIP)" "release/$(RELEASENAME)"
-	@echo "Release checksum: release/$(RELEASENAME).sha256sum"
-	@cd release/ && $(SHA256SUM) $(RELEASENAME) > $(RELEASENAME).sha256sum
+	@cp -v "$(FLASHABLEZIP)" "$@"
+$(RELEASESUM): $(RELEASEZIP)
+	@echo "Release checksum: $@"
+	@cd "$(@D)" && $(SHA256SUM) $(RELEASENAME) > $(@F)
 
 install: $(FLASHABLEZIP)
 	@echo "Waiting for ADB sideload mode"
