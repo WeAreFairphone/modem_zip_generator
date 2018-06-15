@@ -7,12 +7,15 @@ This repo host the code to generate a reproducible, flashable ZIP file (called `
 You can always download the latest `modem.zip` release from [this link](https://github.com/WeAreFairphone/modem_zip_generator/releases "Download latest modem.zip"). Also, previous releases can be found at the [releases page at GitHub](https://github.com/WeAreFairphone/modem_zip_generator/releases "Previous releases of the modem.zip").
 
 ### System requirements
-The project has been developed on GNU/Linux systems, it should however run on other UNIX systems, too. The following tools are required for the script to run:
+The following tools are required for the script to run:
  - GNU `make`
  - `bash`
  - `curl`
  - `zip` & `unzip`
  - `sha256sum`
+
+The project has been developed on GNU/Linux systems, it should however run on other UNIX systems, too. For Mac OS you'll need the GNU coreutils. Using [Homebrew](https://brew.sh): `$ brew install coreutils`.
+
 
 ### Build
 Clone the repository and execute `make build`, it will download and verify the official Fairphone 2 firmware images and extract the proprietary firmware images.
