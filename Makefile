@@ -20,10 +20,18 @@ EDIFY_SCRIPT := ./src/META-INF/com/google/android/updater-script
 TEMP_DIR     := $(shell mktemp --dry-run -d /tmp/modem.XXXXXXXX)
 
 # Update ZIPs
+## OTA update for the Edify interpreter
 OTA_FILENAME := fp2-sibon-$(VERSION)-ota-userdebug.zip
 OTA_FILE     := ./updates/$(OTA_FILENAME)
 OTA_URL      := https://storage.googleapis.com/fairphone-updates/6cb84543-9614-425d-9ab4-9e80baca2b8f/$(OTA_FILENAME)
 OTA_CHECKSUM := 97b39681b773804c8e12177293171698395c43ad9458c7ba823c85c503f00500
+## Update with desired firmware images (ota or manual)
+FWUPDATE_FILENAME := $(OTA_FILENAME)
+FWUPDATE_FILE     := ./updates/$(FWUPDATE_FILENAME)
+FWUPDATE_URL      := $(OTA_URL)
+FWUPDATE_CHECKSUM := $(OTA_CHECKSUM)
+### Images directory uses to be 'firmware-update' for OTA ZIPs and 'images' for manual ZIPs
+FWUPDATE_IMGSDIR  := firmware-update
 
 # Dependencies
 CURL      := $(shell command -v curl 2>&1)
@@ -54,6 +62,12 @@ $(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
 	@rm -rf "$(TEMP_DIR)"
 	@echo "Result: $@"
 
+$(FWUPDATE_FILE):
+	@echo "Downloading $(FWUPDATE_FILENAME)..."
+	@mkdir -pv `dirname $(FWUPDATE_FILE)`
+	@$(CURL) --progress-bar "$(FWUPDATE_URL)" -o $(FWUPDATE_FILE)
+	@$(SHA256SUM) --check <(echo "$(FWUPDATE_CHECKSUM) $(FWUPDATE_FILE)") || rm -f "$(FWUPDATE_FILE)"
+
 $(OTA_FILE):
 	@echo "Downloading $(OTA_FILENAME)..."
 	@mkdir -pv "$(@D)"
@@ -69,17 +83,17 @@ $(EDIFY_BINARY): $(OTA_FILE)
 		-d "$(@D)"
 	@touch "$@" # Update filedate so Make doesn't unpack it always
 
-$(FIRMWARE_DIR): $(OTA_FILE)
+$(FIRMWARE_DIR): $(FWUPDATE_FILE)
 	@echo "Unpacking firmware files..."
 	@rm -rf "$@"
 	@$(UNZIP) -j \
-		$(OTA_FILE) \
-		firmware-update/rpm.mbn \
-		firmware-update/emmc_appsboot.mbn \
-		firmware-update/NON-HLOS.bin \
-		firmware-update/tz.mbn \
-		firmware-update/splash.img \
-		firmware-update/sbl1.mbn \
+		$(FWUPDATE_FILE) \
+		$(FWUPDATE_IMGSDIR)/rpm.mbn \
+		$(FWUPDATE_IMGSDIR)/emmc_appsboot.mbn \
+		$(FWUPDATE_IMGSDIR)/NON-HLOS.bin \
+		$(FWUPDATE_IMGSDIR)/tz.mbn \
+		$(FWUPDATE_IMGSDIR)/splash.img \
+		$(FWUPDATE_IMGSDIR)/sbl1.mbn \
 		-d "$@"
 
 clean:
