@@ -18,6 +18,7 @@ FIRMWARE_DIR := ./src/firmware-update/
 EDIFY_BINARY := ./src/META-INF/com/google/android/update-binary
 EDIFY_SCRIPT := ./src/META-INF/com/google/android/updater-script
 TEMP_DIR     := $(shell mktemp --dry-run -d /tmp/modem.XXXXXXXX)
+TEMP_EDIFY_DIR := $(TEMP_DIR)/META-INF/com/google/android/
 
 # Update ZIPs
 ## OTA update for the Edify interpreter
@@ -49,9 +50,12 @@ $(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
 	@mkdir -p "$(TEMP_DIR)"
 	@cp -r \
 		$(FIRMWARE_DIR) \
+		-t "$(TEMP_DIR)"
+	@mkdir -p "$(TEMP_EDIFY_DIR)/"
+	@cp -r \
 		$(EDIFY_BINARY) \
 		$(EDIFY_SCRIPT) \
-		-t "$(TEMP_DIR)"
+		-t "$(TEMP_EDIFY_DIR)"
 	@find "$(TEMP_DIR)" -exec touch -t 197001010000 {} + # Reproducibility
 	@echo "Building flashable ZIP..."
 	@mkdir -pv "$(@D)"
