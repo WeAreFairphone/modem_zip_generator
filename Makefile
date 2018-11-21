@@ -8,10 +8,16 @@ SHELL       := /bin/bash
 CURL        := $(shell command -v curl 2>&1)
 ZIP         := $(shell command -v zip 2>&1)
 UNZIP       := $(shell command -v unzip 2>&1)
-ifeq ($(uname -s),"Darwin")
+ifeq ($(shell uname -s),Darwin)
+  CP        := $(shell command -v gcp 2>&1)
+  FIND      := $(shell command -v gfind 2>&1)
+  SORT      := $(shell command -v gsort 2>&1)
   SHA256SUM := $(shell command -v gsha256sum 2>&1)
   MKTEMP    := $(shell command -v gmktemp 2>&1)
 else
+  CP        := $(shell command -v cp 2>&1)
+  FIND      := $(shell command -v find 2>&1)
+  SORT      := $(shell command -v sort 2>&1)
   SHA256SUM := $(shell command -v sha256sum 2>&1)
   MKTEMP    := $(shell command -v mktemp 2>&1)
 endif
@@ -55,21 +61,20 @@ build: $(FLASHABLEZIP)
 
 $(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
 	@mkdir -p "$(TEMP_DIR)"
-	@cp -r \
+	@$(CP) -r \
 		$(FIRMWARE_DIR) \
 		-t "$(TEMP_DIR)"
 	@mkdir -p "$(TEMP_EDIFY_DIR)/"
-	@cp -r \
+	@$(CP) -r \
 		$(EDIFY_BINARY) \
 		$(EDIFY_SCRIPT) \
 		-t "$(TEMP_EDIFY_DIR)"
-	@find "$(TEMP_DIR)" -exec touch -t 197001010000 {} + # Reproducibility
+	@$(FIND) "$(TEMP_DIR)" -exec touch -t 197001010000 {} + # Reproducibility
 	@echo "Building flashable ZIP..."
 	@mkdir -pv "$(@D)"
 	@rm -f "$@"
-	@cd "$(TEMP_DIR)" && zip -X \
-		"$(ROOT)/$@" . \
-		--recurse-path
+	@cd "$(TEMP_DIR)" && $(FIND) -type f | $(SORT) | $(ZIP) -X \
+		"$(ROOT)/$@" -@
 	@rm -rf "$(TEMP_DIR)"
 	@echo "Result: $@"
 
@@ -124,7 +129,7 @@ release: $(RELEASEZIP) $(RELEASESUM)
 $(RELEASEZIP): $(FLASHABLEZIP)
 	@mkdir -pv "$(@D)"
 	@echo -n "Release file: "
-	@cp -v "$(FLASHABLEZIP)" "$@"
+	@$(CP) -v "$(FLASHABLEZIP)" "$@"
 
 $(RELEASESUM): $(RELEASEZIP)
 	@echo "Release checksum: $@"
