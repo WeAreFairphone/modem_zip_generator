@@ -14,7 +14,7 @@ The following tools are required for the script to run:
  - `zip` & `unzip`
  - `sha256sum`
 
-The project has been developed on GNU/Linux systems, it should however run on other UNIX systems, too. For Mac OS you'll need the GNU coreutils. Using [Homebrew](https://brew.sh): `$ brew install coreutils`.
+The project has been developed on GNU/Linux systems, it should however run on other UNIX systems, too. For Mac OS you'll need the GNU coreutils and findutils. Using [Homebrew](https://brew.sh): `$ brew install coreutils findutils`.
 
 
 ### Build
