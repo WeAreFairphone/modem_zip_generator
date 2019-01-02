@@ -4,7 +4,7 @@ Update the proprietary firmware of your [Fairphone 2](https://shop.fairphone.com
 This repo host the code to generate a reproducible, flashable ZIP file (called `modem.zip`) with the latest proprietary firmware from a recent Fairphone OS or Fairphone Open OTA.
 
 ### Download
-You can always download the latest `modem.zip` directly from [here](https://io.pinterjann.is/public/misc/fairphone/modem/modem-latest.zip). Alternatively, you can get them at the [releases page at GitHub](https://github.com/WeAreFairphone/modem_zip_generator/releases).
+You can always download the latest `modem.zip` release from [this link](https://github.com/WeAreFairphone/modem_zip_generator/releases "Download latest modem.zip"). Also, previous releases can be found at the [releases page at GitHub](https://github.com/WeAreFairphone/modem_zip_generator/releases "Previous releases of the modem.zip").
 
 ### System requirements
 The project has been developed on GNU/Linux systems, it should however run on other UNIX systems, too. The following tools are required for the script to run:
