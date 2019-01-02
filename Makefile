@@ -113,10 +113,12 @@ clean:
 	rm -f "$(EDIFY_BINARY)"
 
 release: $(RELEASEZIP) $(RELEASESUM)
+
 $(RELEASEZIP): $(FLASHABLEZIP)
 	@mkdir -pv "$(@D)"
 	@echo -n "Release file: "
 	@cp -v "$(FLASHABLEZIP)" "$@"
+
 $(RELEASESUM): $(RELEASEZIP)
 	@echo "Release checksum: $@"
 	@cd "$(@D)" && $(SHA256SUM) $(RELEASENAME) > $(@F)
