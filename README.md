@@ -22,11 +22,18 @@ If you want to test your changes, just run `make install` and connect your devic
 To make a release, just execute `make release`. It will output a `modem-{VERSION}_YYYY-MM-DD.zip` to the `release/` folder.
 
 ### Contributing
-We welcome contributions to this project, specially for new releases. We do this on our free time and we can fall behind the security releases schedule of Fairphone. [Fork this repo](https://github.com/WeAreFairphone/modem_zip_generator/fork), commit your changes —usually tweaking the top of the `Makefile`— and [open a pull request](https://github.com/WeAreFairphone/modem_zip_generator/pull/new).
+We welcome contributions to this project, specially for new releases. We do this on our free time and we can fall behind the security releases schedule of Fairphone. [Fork this repo](https://github.com/WeAreFairphone/modem_zip_generator/fork), commit your changes and [open a pull request](https://github.com/WeAreFairphone/modem_zip_generator/pull/new).
 
-You can find useful this links:
+Usually, if you want to update to the newest release, you'll just need to tweak the variable definitions at the top of the `Makefile`. The general flow of the Makefile is:
+  1. get the Edify interpreter from a OTA release → set ```OTA_*``` variables accordingly.
+  2. get the firmware images from a MANUAL release → set ```FWUPDATE_*``` variables accordingly.
+     - In case latest OTA release includes every firmware image, these variables can be assigned to their `OTA_*` counterparts (```FWUPDATE_FILENAME := $(OTA_FILENAME)``` and so on). Don't worry, GNU Make is a clever system and won't re-download two identical ZIPs.
+  3. pack them into a ready-to-flash ZIP file.
+  
+ You can also find useful these links:
  - Fairphone Open update files can be found at https://code.fairphone.com/projects/fp-osos/user/fairphone-open-source-os-downloads.html
  - Fairphone OS update files can be found at https://support.fairphone.com/hc/en-us/articles/213290023-Fairphone-OS-downloads-for-Fairphone-2
+
 
 ### Misc
 See this [forum post](https://forum.fairphone.com/t/pencil2-fp2-modem-firmware/35374) for more information about this project.
