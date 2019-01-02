@@ -5,7 +5,7 @@
 SHELL     := /bin/bash
 
 # Version and release
-VERSION      := 18.04.1
+VERSION      := 18.10.0
 FLASHABLEZIP := ./build/modem.zip
 RELEASENAME  := $(shell date +"modem-$(VERSION)_%Y-%m-%d.zip")
 RELEASEZIP   := release/$(RELEASENAME)
@@ -22,17 +22,17 @@ TEMP_EDIFY_DIR := $(TEMP_DIR)/META-INF/com/google/android/
 
 # Update ZIPs
 ## OTA update for the Edify interpreter
-OTA_FILENAME := fp2-sibon-$(VERSION)-ota-userdebug.zip
+OTA_FILENAME := fp2-sibon-18.04.1-ota-userdebug.zip
 OTA_FILE     := ./updates/$(OTA_FILENAME)
 OTA_URL      := https://storage.googleapis.com/fairphone-updates/6cb84543-9614-425d-9ab4-9e80baca2b8f/$(OTA_FILENAME)
 OTA_CHECKSUM := 97b39681b773804c8e12177293171698395c43ad9458c7ba823c85c503f00500
 ## Update with desired firmware images (ota or manual)
-FWUPDATE_FILENAME := $(OTA_FILENAME)
+FWUPDATE_FILENAME := fp2-sibon-$(VERSION)-manual.zip
 FWUPDATE_FILE     := ./updates/$(FWUPDATE_FILENAME)
-FWUPDATE_URL      := $(OTA_URL)
-FWUPDATE_CHECKSUM := $(OTA_CHECKSUM)
+FWUPDATE_URL      := https://storage.googleapis.com/fairphone-updates/0703921c-b837-40b0-bbf0-9da7f2607b08/$(FWUPDATE_FILENAME)
+FWUPDATE_CHECKSUM := 4b52e477c6c28a5fdb3a1b78a97eff0dd51c3111061dfc62ed784e6c57ca5ba6
 ### Images directory uses to be 'firmware-update' for OTA ZIPs and 'images' for manual ZIPs
-FWUPDATE_IMGSDIR  := firmware-update
+FWUPDATE_IMGSDIR  := images
 
 # Dependencies
 CURL      := $(shell command -v curl 2>&1)
@@ -46,6 +46,7 @@ all: build
 
 
 build: $(FLASHABLEZIP)
+
 $(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
 	@mkdir -p "$(TEMP_DIR)"
 	@cp -r \
@@ -112,10 +113,12 @@ clean:
 	rm -f "$(EDIFY_BINARY)"
 
 release: $(RELEASEZIP) $(RELEASESUM)
+
 $(RELEASEZIP): $(FLASHABLEZIP)
 	@mkdir -pv "$(@D)"
 	@echo -n "Release file: "
 	@cp -v "$(FLASHABLEZIP)" "$@"
+
 $(RELEASESUM): $(RELEASEZIP)
 	@echo "Release checksum: $@"
 	@cd "$(@D)" && $(SHA256SUM) $(RELEASENAME) > $(@F)
