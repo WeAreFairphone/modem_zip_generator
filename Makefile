@@ -99,6 +99,7 @@ $(FIRMWARE_DIR): $(FWUPDATE_FILE)
 		$(FWUPDATE_IMGSDIR)/tz.mbn \
 		$(FWUPDATE_IMGSDIR)/splash.img \
 		$(FWUPDATE_IMGSDIR)/sbl1.mbn \
+		$(FWUPDATE_IMGSDIR)/sdi.mbn \
 		-d "$@"
 
 clean:

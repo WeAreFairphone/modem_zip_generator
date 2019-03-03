@@ -9,6 +9,9 @@ set_progress(0.300000);
 package_extract_file("firmware-update/sbl1.mbn", "/dev/block/platform/msm_sdcc.1/by-name/sbl1");
 set_progress(0.400000);
 
+package_extract_file("firmware-update/sdi.mbn", "/dev/block/platform/msm_sdcc.1/by-name/sdi");
+set_progress(0.500000);
+
 package_extract_file("firmware-update/rpm.mbn", "/dev/block/platform/msm_sdcc.1/by-name/rpm");
 set_progress(0.600000);
 
