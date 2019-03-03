@@ -27,12 +27,12 @@ OTA_FILE     := ./updates/$(OTA_FILENAME)
 OTA_URL      := https://storage.googleapis.com/fairphone-updates/5a2d07a7-4402-4e3c-a57b-a6fdd5078c66/$(OTA_FILENAME)
 OTA_CHECKSUM := 7a36eb7e722e2f823eb228c9565c1d19febfdf1b3169c9e59b9791063647c045
 ## Update with desired firmware images (ota or manual)
-FWUPDATE_FILENAME := fp2-sibon-$(VERSION)-manual.zip
+FWUPDATE_FILENAME := $(OTA_FILENAME)
 FWUPDATE_FILE     := ./updates/$(FWUPDATE_FILENAME)
-FWUPDATE_URL      := https://storage.googleapis.com/fairphone-updates/5a2d07a7-4402-4e3c-a57b-a6fdd5078c66/$(FWUPDATE_FILENAME)
-FWUPDATE_CHECKSUM := b46c4987e41350a144c6c9e188f94169e1cd0b04b6f653ad12c77c3fc9d2a081
+FWUPDATE_URL      := $(OTA_URL)
+FWUPDATE_CHECKSUM := $(OTA_CHECKSUM)
 ### Images directory uses to be 'firmware-update' for OTA ZIPs and 'images' for manual ZIPs
-FWUPDATE_IMGSDIR  := images
+FWUPDATE_IMGSDIR  := firmware-update
 
 # Dependencies
 CURL      := $(shell command -v curl 2>&1)
