@@ -73,7 +73,7 @@ $(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
 	@echo "Building flashable ZIP..."
 	@mkdir -pv "$(@D)"
 	@rm -f "$@"
-	@cd "$(TEMP_DIR)" && $(FIND) -type f | $(SORT) | $(ZIP) -X \
+	@cd "$(TEMP_DIR)" && $(FIND) -type f | LC_ALL=C $(SORT) | $(ZIP) -X \
 		"$(ROOT)/$@" -@
 	@rm -rf "$(TEMP_DIR)"
 	@echo "Result: $@"
