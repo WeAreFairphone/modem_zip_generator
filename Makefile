@@ -70,6 +70,7 @@ $(FLASHABLEZIP): $(FIRMWARE_DIR) $(EDIFY_BINARY) $(EDIFY_SCRIPT)
 		$(EDIFY_SCRIPT) \
 		-t "$(TEMP_EDIFY_DIR)"
 	@$(FIND) "$(TEMP_DIR)" -exec touch -t 197001010000 {} + # Reproducibility
+	@$(FIND) "$(TEMP_DIR)" -type f -exec chmod u=rw,go=r {} + # Reproducibility
 	@echo "Building flashable ZIP..."
 	@mkdir -pv "$(@D)"
 	@rm -f "$@"
