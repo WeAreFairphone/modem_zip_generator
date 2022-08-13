@@ -23,7 +23,7 @@ else
 endif
 
 # Version and release
-VERSION      := 21.10.0-rel.2
+VERSION      := 21.12.0-rel.1
 FLASHABLEZIP := ./build/modem.zip
 RELEASENAME  := $(shell date +"modem-$(VERSION)_%Y-%m-%d.zip")
 RELEASEZIP   := release/$(RELEASENAME)
@@ -40,10 +40,10 @@ TEMP_EDIFY_DIR := $(TEMP_DIR)/META-INF/com/google/android/
 
 # Update ZIPs
 ## OTA update for the Edify interpreter
-OTA_FILENAME := $(VERSION)-sibon-1ee7158a-ota.zip
+OTA_FILENAME := $(VERSION)-sibon-dd018702-ota.zip
 OTA_FILE     := ./updates/$(OTA_FILENAME)
-OTA_URL      := https://storage.googleapis.com/fairphone-updates/f9b7692f-c822-499f-8764-752cb1296c5e/$(OTA_FILENAME)
-OTA_CHECKSUM := f9caa11c08f25ef8c086902fa6a251eac21dc7f9f0890b7cc999a80be08aeca9
+OTA_URL      := https://storage.googleapis.com/fairphone-updates/749806bd-b9c2-4662-974c-99b1f8e0a9d4/$(OTA_FILENAME)
+OTA_CHECKSUM := 70f608393532280d30992ed2f661073a40fee59ad227e445e3cd7631e20b8f36
 ## Update with desired firmware images (ota or manual)
 FWUPDATE_FILENAME := $(OTA_FILENAME)
 FWUPDATE_FILE     := ./updates/$(FWUPDATE_FILENAME)
